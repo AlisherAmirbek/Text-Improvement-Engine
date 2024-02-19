@@ -6,7 +6,7 @@ This tool analyzes text to identify sentences that could be improved and suggest
 
 ### Prerequisites
 
-- Python 3.8 or later
+- Python 3.10 or later
 - pip (Python package installer)
 
 ### Installation
