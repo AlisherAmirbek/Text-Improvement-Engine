@@ -4,7 +4,14 @@ from scipy.spatial.distance import cosine
 import csv
 from sentence_transformers import SentenceTransformer, util
 
-decoder = AutoModelForCausalLM.from_pretrained("microsoft/phi-2", torch_dtype="auto", trust_remote_code=True)
+if torch.cuda.is_available():
+    print("GPU is available")
+    device = torch.device("cuda")
+else:
+    print("GPU is not available, using CPU instead")
+    device = torch.device("cpu")
+
+decoder = AutoModelForCausalLM.from_pretrained("microsoft/phi-2", torch_dtype="auto", trust_remote_code=True).to(device)
 tokenizer = AutoTokenizer.from_pretrained("microsoft/phi-2", trust_remote_code=True)
 
 encoder = SentenceTransformer('all-MiniLM-L6-v2')
@@ -41,8 +48,8 @@ def find_most_similar(input_text, standard_phrases):
 def generate_revised_sentence(original_sentence, suggested_improvement):
     prompt = f"Instruct: Revise this sentence to incorporate the suggested improvement while maintaining its original meaning:\nOriginal Sentence: {original_sentence}\nRevise sentence using this phrase: {suggested_improvement}\nOutput:"
     
-    inputs = tokenizer(prompt, return_tensors="pt", max_length=64, return_attention_mask=False)
-    outputs = model.generate(**inputs, max_length=64)
+    inputs = tokenizer(prompt, return_tensors="pt", max_length=64, return_attention_mask=False).to(device)
+    outputs = decoder.generate(**inputs, max_length=128)
     revised_sentence = tokenizer.batch_decode(outputs)[0]
     
     revised_sentence = revised_sentence.split("Output:")[1].strip()
