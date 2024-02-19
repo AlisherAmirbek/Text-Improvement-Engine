@@ -1,0 +1,6 @@
+transformers
+torch
+argparse
+scipy
+tqdm
+sentence-transformers
