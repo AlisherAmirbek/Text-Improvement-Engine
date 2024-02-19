@@ -46,11 +46,12 @@ def find_most_similar(input_text, standard_phrases):
     return most_similar_phrase, max_similarity
 
 def generate_revised_sentence(original_sentence, suggested_improvement):
-    prompt = f"Instruct: Revise this sentence to incorporate the suggested improvement while maintaining its original meaning:\nOriginal Sentence: {original_sentence}\nRevise sentence using this phrase: {suggested_improvement}\nOutput:"
-    
-    inputs = tokenizer(prompt, return_tensors="pt", max_length=64, return_attention_mask=False).to(device)
-    outputs = decoder.generate(**inputs, max_length=128)
-    revised_sentence = tokenizer.batch_decode(outputs)[0]
+    prompt = f"Instruct: Seamlessly incorporate the suggested phrase into the original sentence below, ensuring the revised sentence maintains grammatical coherence, the original intent, and meaning. Avoid abrupt starts or awkward phrasing. Do not use quotation marks for the revised sentence.\nOriginal Sentence: '{original_sentence}'\nSuggested Improvement Phrase: '{suggested_improvement}'\nOutput:"
+
+
+    inputs = tokenizer(prompt, return_tensors="pt", max_length=256, return_attention_mask=True, truncation=True).to(device)
+    outputs = decoder.generate(**inputs, max_length=512, pad_token_id=tokenizer.eos_token_id)
+    revised_sentence = tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
     
     revised_sentence = revised_sentence.split("Output:")[1].strip()
     

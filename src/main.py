@@ -1,23 +1,6 @@
 import argparse
-from utils import load_standard_phrases, find_most_similar, generate_revised_sentence
-from tqdm import tqdm
-
-def analyze_text(file_path, standard_phrases, threshold=0.3):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        text = file.read()
-
-    suggestions = []
-
-    sentences = [sentence.strip() for sentence in text.split('.') if sentence]
-    
-    for sentence in tqdm(sentences, desc="Analyzing text"):
-        most_similar_phrase, similarity = find_most_similar(sentence, standard_phrases)
-        if similarity >= threshold:
-            revised_sentence = generate_revised_sentence(sentence, most_similar_phrase)
-            suggestions.append((sentence, most_similar_phrase, similarity, revised_sentence))
-    
-    return suggestions
-
+from utils import load_standard_phrases
+from text_processor import process_text_file
 
 def main():
     parser = argparse.ArgumentParser(description="Text Analysis Tool")
@@ -32,9 +15,10 @@ def main():
         return
 
     if args.text:
-        suggestions = analyze_text(args.text, standard_phrases)
+        output_file_path = 'data/revised_text'
+        suggestions = process_text_file(args.text, output_file_path, standard_phrases)
         for original, phrase, score, revised in suggestions:
-            print(f"Original: {original} | Phrase: {phrase} | Similarity: {score:.2f} | Revised sentencce: {revised}\n")
+            print(f"Original: {original} | Phrase: {phrase} | Similarity: {score:.2f} | Revised sentence: {revised}\n")
     else:
         print("No text provided to analyze.")
 
