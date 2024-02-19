@@ -15,7 +15,7 @@ def main():
         return
 
     if args.text:
-        output_file_path = 'data/revised_text'
+        output_file_path = 'data/revised_text.txt'
         suggestions = process_text_file(args.text, output_file_path, standard_phrases)
         for original, phrase, score, revised in suggestions:
             print(f"Original: {original} | Phrase: {phrase} | Similarity: {score:.2f} | Revised sentence: {revised}\n")
