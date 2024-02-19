@@ -2,10 +2,6 @@
 
 This tool analyzes text to identify sentences that could be improved and suggests revisions to enhance clarity, coherence, and overall impact. It leverages advanced natural language processing (NLP) techniques to generate suggestions that align closely with the context and intent of the original text.
 
-## Video
-
-
-
 ## Setup Process
 
 ### Prerequisites
