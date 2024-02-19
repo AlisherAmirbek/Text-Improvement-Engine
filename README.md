@@ -40,7 +40,7 @@ pip install -r requirements.txt
 python src/main.py --input path/to/input.txt --output path/to/phrases.csv
 ```
 
-Replace `path/to/input.txt` with the path to your text file and `path/to/output.txt` with the desired path for the output.
+Replace `path/to/input.txt` with the path to your text file and `path/to/phrases.csv` with the path for the suggested phrases.
 
 ## Technologies Used
 
